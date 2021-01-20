@@ -12,22 +12,24 @@ public class App {
 	        xepPersister.connect("localhost", 1972, "mydb", "superuser", "SYS");
 			System.out.println("InterSystems IRISに接続しました。");
 
-	        xepPersister.deleteExtent("User.TEST2");
-	        xepPersister.importSchema("User.TEST2");
+			// スキーマを作成
+	        xepPersister.deleteExtent("User.Person");
+	        xepPersister.importSchema("User.Person");
 	       
-	        // Eventを作成
-	        Event xepEvent = xepPersister.getEvent("User.TEST2");
-	        TEST2 o = new TEST2();
-	        o.id=BigDecimal.valueOf(123);
-	        o.name="テスト";
+	        Person p = new Person();
+	        p.id=BigDecimal.valueOf(123);
+	        p.name="テスト";
 
+	        // Eventを作成
+			Event xepEvent = xepPersister.getEvent("User.Person");
+			
 	        // Eventを保続
-	        xepEvent.store(o);
+	        xepEvent.store(p);
 			System.out.println("InterSystems IRISに保存しました。");
 			
 			// JDBC経由でアクセス
 			System.out.println("========================");
-	        PreparedStatement stmt = xepPersister.prepareStatement("select * from TEST2");
+	        PreparedStatement stmt = xepPersister.prepareStatement("select * from person");
 	        ResultSet rs = stmt.executeQuery();
 			while (rs.next()) 
 			{
